@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html><head><title>Lemon Courier - all shipments</title></head><body>
+<h1>All shipments (internal)</h1>
+<ul>
+{% for s in shipments %}
+<li>{{ s.tracking_code }} &rarr; {{ s.destination }} (PIN {{ s.release_pin }})</li>
+{% endfor %}
+</ul>
+<a href="/">Home</a>
+</body></html>

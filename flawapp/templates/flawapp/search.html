@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html><head><title>Parcel locker</title></head><body>
+<h1>Open a parcel locker</h1>
+{% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+<form action="/release/" method="post">
+  {% csrf_token %}
+  <p>Tracking code: <input name="tracking_code"></p>
+  <p>Release PIN: <input name="release_pin"></p>
+  <button type="submit">Release parcel</button>
+</form>
+<a href="/">Home</a>
+</body></html>

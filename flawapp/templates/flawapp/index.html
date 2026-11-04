@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>Lemon Courier</title></head>
+<body>
+<h1>Lemon Courier</h1>
+<p>User: {{ user.username }} | <a href="/logout/">logout</a></p>
+
+<h2>Your shipments</h2>
+<ul>
+{% for s in shipments %}
+<li>{{ s.tracking_code }} &rarr; {{ s.destination }}
+  <form action="/delete/" method="post" style="display:inline">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ s.id }}">
+    <button type="submit">delete</button>
+  </form>
+</li>
+{% endfor %}
+</ul>
+
+<h2>Add shipment</h2>
+<form action="/add/" method="post">
+  {% csrf_token %}
+  <p>Tracking code: <input name="tracking_code"></p>
+  <p>Destination: <input name="destination"></p>
+  <p>Release PIN: <input name="release_pin"></p>
+  <p>Impersonate user (flaw): <input name="impersonate"></p>
+  <button type="submit">Add</button>
+</form>
+
+<p><a href="/search/">Open parcel locker with code + PIN</a></p>
+
+<h2>Recent tracking events</h2>
+<ul>
+{% for e in events %}<li>{{ e.note }}</li>{% endfor %}
+</ul>
+</body>
+</html>
