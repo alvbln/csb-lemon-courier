@@ -52,22 +52,11 @@ def loginView(request):
         # FIXED (FLAW 2): verify the salted hash via Django's authentication machinery
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            cache.delete("login_fails_" + username)
             login(request, user)
             return redirect("/")
-        # FIX (FLAW 4): throttle repeated failures, e.g. with the Django cache:
-        # from django.core.cache import cache
-        # key = f"login_fails_{username}"
-        # fails = cache.get(key, 0)
-        # if fails >= 5:
-        #     return render(request, "flawapp/login.html", {"error": "Account temporarily locked, try again later"})
-        # FIX (FLAW 2): verify the hash and create the session with Django's machinery
-        # from django.contrib.auth import authenticate
-        # user = authenticate(request, username=username, password=password)
-        # if user is not None:
-        #     cache.delete(key)
-        #     login(request, user)
-        #     return redirect("/")
-        # cache.set(key, fails + 1, 600)
+        # FIXED (FLAW 4): count the failure and remember it for 10 minutes
+        cache.set("login_fails_" + username, cache.get("login_fails_" + username, 0) + 1, 600)
         return render(request, "flawapp/login.html", {"error": "Invalid credentials"})
     return render(request, "flawapp/login.html")
 

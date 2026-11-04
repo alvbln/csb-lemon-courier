@@ -71,6 +71,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# FLAW 5b (A05: Authentication misconfig): the login URL for @login_required points at the
+# homepage, not at a login form; also the flawed app did not redirect cleanly.
+LOGIN_URL = "/login/"
+
 # FIX (FLAW 5): load the key from the environment, turn DEBUG off, pin ALLOWED_HOSTS
 # import os
 # SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
